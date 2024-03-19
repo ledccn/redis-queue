@@ -42,15 +42,18 @@ class $class implements Consumer
 {
     use HasHelper;
     
-    // 要消费的队列名
-    public \$queue = '$queue';
+    /**
+     * 要消费的队列名
+     * @var string
+     */
+    public string \$queue = '$queue';
     /**
      * 连接名
      * - 对应 config/redis-queue.php 里的连接
      * - 对应 plugin/webman/redis-queue/redis.php 里的连接
      * @return string
      */
-    public \$connection = 'default';
+    public string \$connection = 'default';
 
     /**
      * 消费方法
@@ -63,7 +66,6 @@ class $class implements Consumer
         var_export(\$data);
     }
 }
-
 
 EOF;
         file_put_contents($file, $controller_content);
