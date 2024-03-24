@@ -14,19 +14,18 @@ class Install
      */
     protected static array $pathRelation = array(
         'config/plugin/ledc/redis-queue' => 'config/plugin/ledc/redis-queue',
+        'config/JobsAbstract.stub' => 'app/jobs/JobsAbstract.php',
+        'config/JobsConsumer.stub' => 'app/queue/redis/JobsConsumer.php',
         'config/redis_queue.php' => 'config/redis_queue.php',
     );
 
     /**
-     * Ledc\RedisQueue\Install
+     * install
      * @return void
      */
     public static function install(): void
     {
         static::installByRelation();
-        if (!is_dir(app_path() . '/queue/redis')) {
-            mkdir(app_path() . '/queue/redis', 0777, true);
-        }
     }
 
     /**

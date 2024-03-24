@@ -5,4 +5,5 @@
 
 return [
     Ledc\RedisQueue\Command\MakeConsumer::class,
+    Ledc\RedisQueue\Command\MakeJobsCommand::class,
 ];
