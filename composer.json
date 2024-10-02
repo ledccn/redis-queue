@@ -20,7 +20,7 @@
     "source": "https://github.com/ledccn/redis-queue"
   },
   "require": {
-    "php": "^8.2 || ^8.3",
+    "php": ">=8.2",
     "ext-redis": "*",
     "ext-json": "*",
     "workerman/webman-framework": "^1.5.0",
