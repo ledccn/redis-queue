@@ -1,8 +1,7 @@
 <?php
 
-namespace app\jobs;
+namespace Ledc\RedisQueue\Adapter;
 
-use app\queue\redis\JobsConsumer;
 use RuntimeException;
 
 /**

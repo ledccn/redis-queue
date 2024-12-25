@@ -14,7 +14,6 @@ class Install
      */
     protected static array $pathRelation = array(
         'config/plugin/ledc/redis-queue' => 'config/plugin/ledc/redis-queue',
-        'config/JobsAbstract.stub' => 'app/jobs/JobsAbstract.php',
         'config/JobsConsumer.stub' => 'app/queue/redis/JobsConsumer.php',
         'config/redis_queue.php' => 'config/redis_queue.php',
     );

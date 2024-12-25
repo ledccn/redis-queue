@@ -72,7 +72,7 @@ class MakeJobsCommand extends Command
 
 namespace $namespace;
 
-use app\\jobs\\JobsAbstract;
+use Ledc\\RedisQueue\\Adapter\\JobsAbstract;
 
 /**
  * 任务 
