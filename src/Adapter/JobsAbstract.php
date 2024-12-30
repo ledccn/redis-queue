@@ -41,7 +41,7 @@ abstract class JobsAbstract
      * @param array $constructor 构造函数参数
      * @return bool
      */
-    final public static function emit(array $callable = [], mixed $args = null, int $delay = 0, array $constructor = []): bool
+    final public static function emit(array $callable, mixed $args = null, int $delay = 0, array $constructor = []): bool
     {
         if (2 !== count($callable)) {
             throw new RuntimeException('参数callable错误');

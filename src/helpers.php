@@ -12,7 +12,7 @@ use Ledc\RedisQueue\Adapter\JobsAbstract;
  * @param array $constructor 构造函数参数
  * @return bool
  */
-function job_emit(array $callable = [], mixed $args = null, int $delay = 0, array $constructor = []): bool
+function job_emit(array $callable, mixed $args = null, int $delay = 0, array $constructor = []): bool
 {
     return JobsAbstract::emit($callable, $args, $delay, $constructor);
 }
