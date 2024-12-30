@@ -30,6 +30,9 @@
   "autoload": {
     "psr-4": {
       "Ledc\\RedisQueue\\": "src"
-    }
+    },
+    "files": [
+      "src/helpers.php"
+    ]
   }
 }
