@@ -74,7 +74,7 @@ class Redis
         $config = [
             'host' => parse_url($address, PHP_URL_HOST),
             'port' => parse_url($address, PHP_URL_PORT),
-            'db' => $config['options']['database'] ?? $config['options']['db'] ?? 0,
+            'db' => $config['options']['db'] ?? 0,
             'auth' => $config['options']['auth'] ?? '',
             'timeout' => $config['options']['timeout'] ?? 2,
             'ping' => $config['options']['ping'] ?? 55,
