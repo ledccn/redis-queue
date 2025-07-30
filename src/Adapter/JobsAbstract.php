@@ -46,7 +46,7 @@ abstract class JobsAbstract
         if (2 !== count($callable)) {
             throw new RuntimeException('参数callable错误');
         }
-        list($class, $action) = $callable;
+        [$class, $action] = $callable;
         if (!method_exists($class, $action)) {
             throw new RuntimeException($class . '不存在方法 ' . $action);
         }

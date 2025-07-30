@@ -42,9 +42,9 @@ class MakeJobsCommand extends Command
 
         $path = '';
         $namespace = 'app\\jobs';
-        if ($pos = strrpos($name, DIRECTORY_SEPARATOR)) {
-            $path = substr($name, 0, $pos + 1);
-            $name = substr($name, $pos + 1);
+        if ($pos = strrpos((string)$name, DIRECTORY_SEPARATOR)) {
+            $path = substr((string)$name, 0, $pos + 1);
+            $name = substr((string)$name, $pos + 1);
             $namespace .= '\\' . str_replace(DIRECTORY_SEPARATOR, '\\', trim($path, DIRECTORY_SEPARATOR));
         }
         $class = Util::nameToClass($name);

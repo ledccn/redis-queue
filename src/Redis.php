@@ -72,8 +72,8 @@ class Redis
         $redis = new RedisConnection();
         $address = $config['host'];
         $config = [
-            'host' => parse_url($address, PHP_URL_HOST),
-            'port' => parse_url($address, PHP_URL_PORT),
+            'host' => parse_url((string)$address, PHP_URL_HOST),
+            'port' => parse_url((string)$address, PHP_URL_PORT),
             'db' => $config['options']['db'] ?? 0,
             'auth' => $config['options']['auth'] ?? '',
             'timeout' => $config['options']['timeout'] ?? 2,

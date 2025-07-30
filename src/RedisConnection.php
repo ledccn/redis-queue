@@ -42,7 +42,7 @@ class RedisConnection extends \Redis
             $this->setOption(\Redis::OPT_PREFIX, $this->config['prefix']);
         }
         if (Worker::getAllWorkers() && !$timer) {
-            $timer = Timer::add($this->config['ping'] ?? 55, function ()  {
+            $timer = Timer::add($this->config['ping'] ?? 55, function (): void {
                 $this->execCommand('ping');
             });
         }
@@ -83,7 +83,7 @@ class RedisConnection extends \Redis
         $queue_delay = '{redis-queue}-delayed';
         $now = time();
         $package_str = json_encode([
-            'id' => time() . rand(),
+            'id' => time() . random_int(0, mt_getrandmax()),
             'time' => $now,
             'delay' => $delay,
             'attempts' => 0,

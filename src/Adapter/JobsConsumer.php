@@ -40,7 +40,7 @@ class JobsConsumer implements Consumer
             return;
         }
 
-        list($class, $method) = self::parseJob($job);
+        [$class, $method] = self::parseJob($job);
         $instance = $constructor ? Container::make($class, $constructor) : Container::get($class);
         if (method_exists($instance, $method)) {
             if (is_array($parameters)) {

@@ -155,7 +155,7 @@ trait HasRedisGeo
     public function __call(string $name, array $arguments): mixed
     {
         if (!str_starts_with(strtolower($name), 'geo')) {
-            throw new BadMethodCallException('Call to undefined method ' . __CLASS__ . '::' . $name . '()');
+            throw new BadMethodCallException('Call to undefined method ' . self::class . '::' . $name . '()');
         }
         return Redis::connection()->{$name}($this->getGeoKey(), ...$arguments);
     }

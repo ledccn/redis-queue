@@ -12,11 +12,11 @@ class Install
     /**
      * @var array
      */
-    protected static array $pathRelation = array(
+    protected static array $pathRelation = [
         'config/plugin/ledc/redis-queue' => 'config/plugin/ledc/redis-queue',
         'config/JobsConsumer.stub' => 'app/queue/redis/JobsConsumer.php',
         'config/redis_queue.php' => 'config/redis_queue.php',
-    );
+    ];
 
     /**
      * install
@@ -43,8 +43,8 @@ class Install
     public static function installByRelation(): void
     {
         foreach (static::$pathRelation as $source => $dest) {
-            if ($pos = strrpos($dest, '/')) {
-                $parent_dir = base_path() . '/' . substr($dest, 0, $pos);
+            if ($pos = strrpos((string)$dest, '/')) {
+                $parent_dir = base_path() . '/' . substr((string)$dest, 0, $pos);
                 if (!is_dir($parent_dir)) {
                     mkdir($parent_dir, 0777, true);
                 }
@@ -61,7 +61,7 @@ class Install
      */
     public static function uninstallByRelation(): void
     {
-        foreach (static::$pathRelation as $source => $dest) {
+        foreach (static::$pathRelation as $dest) {
             $path = base_path() . "/$dest";
             if (!is_dir($path) && !is_file($path)) {
                 continue;
