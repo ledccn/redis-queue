@@ -39,7 +39,7 @@ trait HasHash
             if (!$value) {
                 return null;
             }
-            static::hSet($member, $value);
+            static::connection()->hSet(static::getKey(), $member, $value);
             return $value;
         }
         return $value ?: null;
