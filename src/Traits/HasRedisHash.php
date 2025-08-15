@@ -2,6 +2,7 @@
 
 namespace Ledc\RedisQueue\Traits;
 
+use Illuminate\Redis\Connections\Connection;
 use support\Redis;
 
 /**
@@ -39,11 +40,11 @@ trait HasRedisHash
      * 获取存储在哈希表中指定字段的值
      * - 原生
      * @param string $field
-     * @return false|string
+     * @return false|mixed
      */
-    public function hGet(string $field): false|string
+    public function hGet(string $field): mixed
     {
-        return Redis::hGet($this->getKeyName(), $field);
+        return $this->connection()->hGet($this->getKeyName(), $field);
     }
 
     /**
@@ -55,7 +56,7 @@ trait HasRedisHash
      */
     public function hSet(string $field, string $value): false|int
     {
-        return Redis::hSet($this->getKeyName(), $field, $value);
+        return $this->connection()->hSet($this->getKeyName(), $field, $value);
     }
 
     /**
@@ -66,7 +67,7 @@ trait HasRedisHash
      */
     public function get(string $field): array|string|int|float|bool|null
     {
-        $value = Redis::hGet($this->getKeyName(), $field);
+        $value = $this->connection()->hGet($this->getKeyName(), $field);
         return is_null($value) ? null : json_decode($value, true);
     }
 
@@ -79,7 +80,7 @@ trait HasRedisHash
      */
     public function set(string $field, array|string|int|float|bool $value): false|int
     {
-        return Redis::hSet($this->getKeyName(), $field, json_encode($value, JSON_UNESCAPED_UNICODE));
+        return $this->connection()->hSet($this->getKeyName(), $field, json_encode($value, JSON_UNESCAPED_UNICODE));
     }
 
     /**
@@ -89,7 +90,7 @@ trait HasRedisHash
      */
     public function has(string $field): bool
     {
-        return Redis::hExists($this->getKeyName(), $field);
+        return $this->connection()->hExists($this->getKeyName(), $field);
     }
 
     /**
@@ -99,6 +100,16 @@ trait HasRedisHash
      */
     public function del(string $field): false|int
     {
-        return Redis::hDel($this->getKeyName(), $field);
+        return $this->connection()->hDel($this->getKeyName(), $field);
+    }
+
+    /**
+     * 获取Redis连接
+     * @param string $name
+     * @return Connection|\Redis
+     */
+    public function connection(string $name = 'default'): Connection|\Redis
+    {
+        return Redis::connection($name);
     }
 }

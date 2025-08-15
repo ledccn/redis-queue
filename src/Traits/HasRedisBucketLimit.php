@@ -2,6 +2,7 @@
 
 namespace Ledc\RedisQueue\Traits;
 
+use Illuminate\Redis\Connections\Connection;
 use support\Redis;
 
 /**
@@ -64,7 +65,7 @@ trait HasRedisBucketLimit
      */
     public function getToken(): bool
     {
-        return (bool)Redis::lPop($this->getBucketKey());
+        return (bool)$this->connection()->lPop($this->getBucketKey());
     }
 
     /**
@@ -87,7 +88,7 @@ trait HasRedisBucketLimit
         $num = min($diff, $num);
         if (0 < $num) {
             $token = array_fill(0, $num, 1);
-            Redis::rPush($this->getBucketKey(), ...$token);
+            $this->connection()->rPush($this->getBucketKey(), ...$token);
         }
 
         return $num;
@@ -98,6 +99,16 @@ trait HasRedisBucketLimit
      */
     public function lengthToken(): int
     {
-        return Redis::lLen($this->getBucketKey()) ?: 0;
+        return $this->connection()->lLen($this->getBucketKey()) ?: 0;
+    }
+
+    /**
+     * 获取Redis连接
+     * @param string $name
+     * @return Connection|\Redis
+     */
+    public function connection(string $name = 'default'): Connection|\Redis
+    {
+        return Redis::connection($name);
     }
 }

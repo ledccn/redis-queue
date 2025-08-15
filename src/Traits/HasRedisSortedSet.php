@@ -2,6 +2,7 @@
 
 namespace Ledc\RedisQueue\Traits;
 
+use Illuminate\Redis\Connections\Connection;
 use support\Redis;
 
 /**
@@ -39,72 +40,72 @@ trait HasRedisSortedSet
      * 向有序集合添加一个或多个成员，或者更新已存在成员的分数
      * @param int|string $score int或double的分数
      * @param string $member
-     * @return int|string
+     * @return false|float|int|string
      */
-    public function zAdd(int|string $score, string $member): int|string
+    public function zAdd(int|string $score, string $member): false|float|int|string
     {
-        return Redis::zAdd($this->getSortedSetKey(), $score, $member);
+        return $this->connection()->zAdd($this->getSortedSetKey(), $score, $member);
     }
 
     /**
      * 有序集合中对指定成员的分数加上增量 increment
      * @param int|string $value
      * @param string $member
-     * @return int|string
+     * @return false|float|int|string
      */
-    public function zIncrBy(int|string $value, string $member): int|string
+    public function zIncrBy(int|string $value, string $member): false|float|int|string
     {
-        return Redis::zIncrBy($this->getSortedSetKey(), $value, $member);
+        return $this->connection()->zIncrBy($this->getSortedSetKey(), $value, $member);
     }
 
     /**
      * 移除有序集合中的一个或多个成员
      * @param string $member
-     * @return int
+     * @return false|int
      */
-    public function zRem(string $member): int
+    public function zRem(string $member): false|int
     {
-        return Redis::zRem($this->getSortedSetKey(), $member);
+        return $this->connection()->zRem($this->getSortedSetKey(), $member);
     }
 
     /**
      * 获取有序集合的成员数
-     * @return int
+     * @return false|int
      */
-    public function zCard(): int
+    public function zCard(): false|int
     {
-        return Redis::zCard($this->getSortedSetKey());
+        return $this->connection()->zCard($this->getSortedSetKey());
     }
 
     /**
      * 返回有序集合中指定成员的索引(索引从0开始)
      * @param string $member
-     * @return int|bool 不存在返回false
+     * @return int|false 不存在返回false
      */
-    public function zRank(string $member): int|bool
+    public function zRank(string $member): false|int
     {
-        return Redis::zRank($this->getSortedSetKey(), $member);
+        return $this->connection()->zRank($this->getSortedSetKey(), $member);
     }
 
     /**
      * 返回有序集中，成员的分数值
      * @param string $member
-     * @return float|bool 不存在返回false
+     * @return false|float|string 不存在返回false
      */
-    public function zScore(string $member): float|bool
+    public function zScore(string $member): false|float|string
     {
-        return Redis::zScore($this->getSortedSetKey(), $member);
+        return $this->connection()->zScore($this->getSortedSetKey(), $member);
     }
 
     /**
      * 计算在有序集合中指定区间分数的成员数
      * @param string $start
      * @param string $end
-     * @return int|null
+     * @return false|int
      */
-    public function zCount(string $start, string $end): ?int
+    public function zCount(string $start, string $end): false|int
     {
-        return Redis::zCount($this->getSortedSetKey(), $start, $end);
+        return $this->connection()->zCount($this->getSortedSetKey(), $start, $end);
     }
 
     /**
@@ -114,12 +115,12 @@ trait HasRedisSortedSet
      * @param string $by
      * @param string $rev
      * @param array $options
-     * @return array
+     * @return false|array
      * @link https://redis.io/commands/zrange/
      */
-    public function zRange(string $start, string $stop, string $by = 'BYSCORE', string $rev = 'REV', array $options = ['LIMIT', 0, 128]): array
+    public function zRange(string $start, string $stop, string $by = 'BYSCORE', string $rev = 'REV', array $options = ['LIMIT', 0, 128]): false|array
     {
-        return Redis::zRange($this->getSortedSetKey(), ... func_get_args());
+        return $this->connection()->zRange($this->getSortedSetKey(), ... func_get_args());
     }
 
     /**
@@ -128,11 +129,11 @@ trait HasRedisSortedSet
      * @param string $start
      * @param string $end
      * @param array $options
-     * @return array
+     * @return false|array
      */
-    public function zRevRangeByScore(string $start, string $end = '-inf', array $options = ['LIMIT', 0, 128]): array
+    public function zRevRangeByScore(string $start, string $end = '-inf', array $options = ['LIMIT', 0, 128]): false|array
     {
-        return Redis::zRevRangeByScore($this->getSortedSetKey(), $start, $end, $options);
+        return $this->connection()->zRevRangeByScore($this->getSortedSetKey(), $start, $end, $options);
     }
 
     /**
@@ -141,10 +142,20 @@ trait HasRedisSortedSet
      * @param string $min
      * @param string $max
      * @param array $options
-     * @return array
+     * @return false|array
      */
-    public function zRangeByScore(string $min = '-inf', string $max = '+inf', array $options = ['LIMIT', 0, 128]): array
+    public function zRangeByScore(string $min = '-inf', string $max = '+inf', array $options = ['LIMIT', 0, 128]): false|array
     {
-        return Redis::zRangeByScore($this->getSortedSetKey(), $min, $max, $options);
+        return $this->connection()->zRangeByScore($this->getSortedSetKey(), $min, $max, $options);
+    }
+
+    /**
+     * 获取Redis连接
+     * @param string $name
+     * @return Connection|\Redis
+     */
+    public function connection(string $name = 'default'): Connection|\Redis
+    {
+        return Redis::connection($name);
     }
 }

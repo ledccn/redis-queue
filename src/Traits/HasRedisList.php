@@ -3,6 +3,7 @@
 namespace Ledc\RedisQueue\Traits;
 
 use Closure;
+use Illuminate\Redis\Connections\Connection;
 use support\Redis;
 
 /**
@@ -38,30 +39,44 @@ trait HasRedisList
 
     /**
      * 移除并获取列表的第一个元素.
+     * @return mixed
      */
-    public function pop(): array|bool
+    public function pop(): mixed
     {
-        $json = Redis::lPop($this->getKey());
+        $json = $this->connection()->lPop($this->getKey());
 
         return is_bool($json) ? $json : json_decode($json, true);
     }
 
     /**
      * 将值插入到列表的尾部(最右边).
+     * @param array|Closure $data
+     * @return bool|int
      */
     public function push(array|Closure $data): bool|int
     {
         $data = $data instanceof Closure ? $data($this) : $data;
 
         // 将一个或多个值插入到列表的尾部(最右边)
-        return Redis::rPush($this->getKey(), json_encode($data));
+        return $this->connection()->rPush($this->getKey(), json_encode($data));
     }
 
     /**
      * 获取列表长度.
+     * @return int
      */
     public function length(): int
     {
-        return Redis::lLen($this->getKey()) ?: 0;
+        return $this->connection()->lLen($this->getKey()) ?: 0;
+    }
+
+    /**
+     * 获取Redis连接
+     * @param string $name
+     * @return Connection|\Redis
+     */
+    public function connection(string $name = 'default'): Connection|\Redis
+    {
+        return Redis::connection($name);
     }
 }

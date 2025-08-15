@@ -2,6 +2,7 @@
 
 namespace Ledc\RedisQueue\Traits;
 
+use Illuminate\Redis\Connections\Connection;
 use support\Redis;
 
 /**
@@ -38,21 +39,21 @@ trait HasRedisSet
     /**
      * 向集合添加一个或多个成员
      * @param string $member
-     * @return int
+     * @return false|int
      */
-    public function sAdd(string $member): int
+    public function sAdd(string $member): false|int
     {
-        return Redis::sAdd($this->getSetKey(), $member);
+        return $this->connection()->sAdd($this->getSetKey(), $member);
     }
 
     /**
      * 移除集合中一个或多个成员
      * @param string $member
-     * @return int
+     * @return false|int
      */
-    public function sRem(string $member): int
+    public function sRem(string $member): false|int
     {
-        return Redis::sRem($this->getSetKey(), $member);
+        return $this->connection()->sRem($this->getSetKey(), $member);
     }
 
     /**
@@ -62,16 +63,16 @@ trait HasRedisSet
      */
     public function sIsMember(string $member): bool
     {
-        return Redis::sIsMember($this->getSetKey(), $member);
+        return $this->connection()->sIsMember($this->getSetKey(), $member);
     }
 
     /**
      * 获取集合的成员数
-     * @return int
+     * @return bool|int
      */
-    public function sCard(): int
+    public function sCard(): false|int
     {
-        return Redis::sCard($this->getSetKey());
+        return $this->connection()->sCard($this->getSetKey());
     }
 
     /**
@@ -87,5 +88,15 @@ trait HasRedisSet
         } else {
             static::sRem($member);
         }
+    }
+
+    /**
+     * 获取Redis连接
+     * @param string $name
+     * @return Connection|\Redis
+     */
+    public function connection(string $name = 'default'): Connection|\Redis
+    {
+        return Redis::connection($name);
     }
 }

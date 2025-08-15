@@ -62,7 +62,7 @@ trait HasRedisGeo
      */
     public function zRem(string $member): int|false
     {
-        return Redis::connection()->zRem($this->getGeoKey(), $member);
+        return $this->connection()->zRem($this->getGeoKey(), $member);
     }
 
     /**
@@ -74,7 +74,7 @@ trait HasRedisGeo
      */
     public function geoAdd(string $longitude, string $latitude, string $member): int|false
     {
-        return Redis::connection()->geoAdd($this->getGeoKey(), $longitude, $latitude, $member);
+        return $this->connection()->geoAdd($this->getGeoKey(), $longitude, $latitude, $member);
     }
 
     /**
@@ -85,9 +85,9 @@ trait HasRedisGeo
     public function geoHash(string|array $members): array|false
     {
         if (is_string($members)) {
-            return Redis::connection()->geoHash($this->getGeoKey(), $members);
+            return $this->connection()->geoHash($this->getGeoKey(), $members);
         } else {
-            return Redis::connection()->geoHash($this->getGeoKey(), ...$members);
+            return $this->connection()->geoHash($this->getGeoKey(), ...$members);
         }
     }
 
@@ -99,9 +99,9 @@ trait HasRedisGeo
     public function geoPos(string|array $members): array|false
     {
         if (is_string($members)) {
-            return Redis::connection()->geoPos($this->getGeoKey(), $members);
+            return $this->connection()->geoPos($this->getGeoKey(), $members);
         } else {
-            return Redis::connection()->geoPos($this->getGeoKey(), ...$members);
+            return $this->connection()->geoPos($this->getGeoKey(), ...$members);
         }
     }
 
@@ -115,7 +115,7 @@ trait HasRedisGeo
      */
     public function geoDist(string $member1, string $member2, string $unit = self::UNIT_KM): float|false
     {
-        return Redis::connection()->geodist($this->getGeoKey(), $member1, $member2, $unit);
+        return $this->connection()->geodist($this->getGeoKey(), $member1, $member2, $unit);
     }
 
     /**
@@ -128,7 +128,7 @@ trait HasRedisGeo
      */
     public function geoSearch(array|string $position, array|int|float $shape, string $unit = self::UNIT_M, array $options = []): array
     {
-        return Redis::connection()->geosearch($this->getGeoKey(), $position, $shape, $unit, $options);
+        return $this->connection()->geosearch($this->getGeoKey(), $position, $shape, $unit, $options);
     }
 
     /**
@@ -143,7 +143,7 @@ trait HasRedisGeo
      */
     public function geoSearchStore(string $dst, string $src, array|string $position, array|int|float $shape, string $unit = self::UNIT_M, array $options = []): array|int|false
     {
-        return Redis::connection()->geosearchstore($dst, $src, $position, $shape, $unit, $options);
+        return $this->connection()->geosearchstore($dst, $src, $position, $shape, $unit, $options);
     }
 
     /**
@@ -157,6 +157,16 @@ trait HasRedisGeo
         if (!str_starts_with(strtolower($name), 'geo')) {
             throw new BadMethodCallException('Call to undefined method ' . self::class . '::' . $name . '()');
         }
-        return Redis::connection()->{$name}($this->getGeoKey(), ...$arguments);
+        return $this->connection()->{$name}($this->getGeoKey(), ...$arguments);
+    }
+
+    /**
+     * 获取Redis连接
+     * @param string $name
+     * @return \Illuminate\Redis\Connections\Connection|\Redis
+     */
+    public function connection(string $name = 'default'): \Illuminate\Redis\Connections\Connection|\Redis
+    {
+        return Redis::connection($name);
     }
 }
