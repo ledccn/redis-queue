@@ -3,6 +3,7 @@
 namespace Ledc\RedisQueue\Traits;
 
 use BadMethodCallException;
+use Illuminate\Redis\Connections\Connection;
 use RedisException;
 use support\Redis;
 
@@ -162,10 +163,9 @@ trait HasRedisGeo
 
     /**
      * 获取Redis连接
-     * @param string $name
-     * @return \Illuminate\Redis\Connections\Connection|\Redis
+     * @return Connection|\Redis
      */
-    public function connection(string $name = 'default'): \Illuminate\Redis\Connections\Connection|\Redis
+    public function connection(string $name = 'default'): Connection|\Redis
     {
         return Redis::connection($name);
     }
