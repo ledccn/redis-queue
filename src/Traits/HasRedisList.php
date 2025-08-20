@@ -72,11 +72,10 @@ trait HasRedisList
 
     /**
      * 获取Redis连接
-     * @param string $name
      * @return Connection|\Redis
      */
-    public function connection(string $name = 'default'): Connection|\Redis
+    public function connection(): Connection|\Redis
     {
-        return Redis::connection($name);
+        return Redis::connection();
     }
 }
